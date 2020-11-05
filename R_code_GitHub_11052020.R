@@ -3,6 +3,8 @@
 # a modeling and observational study" submitted to PLOS One. 
 # Authors: Kenton E Stephens, Pavel Chernyavskiy, and Danielle R Bruns
 ##################################################################################################
+library(sf)
+library(sp)
 
 # Code to compute elevation in meters of continental US county centroids
 #* find county centroids, find their elevation in meters and append
