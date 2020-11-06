@@ -42,7 +42,7 @@ names(nb)<-as.character(cnty_cases$UID)
 # Below must evaluate to TRUE; we now use UID in model formula
 all.equal(sort(names(nb)), sort(levels(as.factor(cnty_cases$UID))))
 
-
+library(mgcv)
 #* 120 day incidence *#
 m_tw120 <- gam(Confirmed_120d ~ offset(log(POP10)) + 
                  as.factor(RUCC_2013)*scale(POP10/HHD10) + scale(elev_m) + 
