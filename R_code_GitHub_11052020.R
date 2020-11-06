@@ -193,6 +193,7 @@ AIC(m_tw30,m_tw30s,m_nb30,m_nb30s)
 
 #############################################################################################
 #* Visualization of non-linear elevation effects *#
+library(mgcViz)
 vis<-getViz(m_tw120s) 
 p1_<-plot(sm(vis,1),trans=exp)    #elevation
 p1<-p1_ + l_fitLine(colour = "red",size=2) + l_rug(alpha=0.5) +
