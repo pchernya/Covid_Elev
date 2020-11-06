@@ -45,8 +45,7 @@ all.equal(sort(names(nb)), sort(levels(as.factor(cnty_cases$UID))))
 
 #* 120 day incidence *#
 m_tw120 <- gam(Confirmed_120d ~ offset(log(POP10)) + 
-                 as.factor(RUCC_2013)*scale(POP10/HHD10) + 
-                 scale(elev_m) + scale(median_age) +
+                 as.factor(RUCC_2013)*scale(POP10/HHD10) + scale(elev_m) + 
                  s(as.factor(cnty_cases$Province_State),bs='re') +
                  s(as.factor(UID), bs = 'mrf', 
                    xt = list(nb = nb), k=1000),
@@ -57,8 +56,7 @@ m_tw120$outer.info$conv # check convergence
 summary(m_tw120)
 ###
 m_tw120s <- gam(Confirmed_120d ~ offset(log(POP10)) + 
-                  as.factor(RUCC_2013)*scale(POP10/HHD10) + 
-                  s(scale(median_age),bs='ds') + s(scale(elev_m),bs='ds') +
+                  as.factor(RUCC_2013)*scale(POP10/HHD10) + s(scale(elev_m),bs='ds') +
                   s(as.factor(cnty_cases$Province_State),bs='re') +
                   s(as.factor(UID), bs = 'mrf', 
                     xt = list(nb = nb), k=1000),
@@ -97,8 +95,7 @@ AIC(m_tw120,m_tw120s,m_nb120,m_nb120s)
 ###############################################################################################
 #* 90 day incidence *#
 m_tw90 <- gam(Confirmed_90d ~ offset(log(POP10)) + 
-                as.factor(RUCC_2013)*scale(POP10/HHD10) + 
-                scale(elev_m) + scale(median_age) +
+                as.factor(RUCC_2013)*scale(POP10/HHD10) + scale(elev_m) + 
                 s(as.factor(cnty_cases$Province_State),bs='re') +
                 s(as.factor(UID), bs = 'mrf', 
                   xt = list(nb = nb), k=1000),
@@ -148,8 +145,7 @@ AIC(m_tw90,m_tw90s,m_nb90,m_nb90s)
 ###############################################################################################
 #* 30 day incidence *#
 m_tw30 <- gam(Confirmed_30d ~ offset(log(POP10)) + 
-                as.factor(RUCC_2013)*scale(POP10/HHD10) + 
-                scale(elev_m) + scale(median_age) +
+                as.factor(RUCC_2013)*scale(POP10/HHD10) + scale(elev_m) + 
                 s(as.factor(cnty_cases$Province_State),bs='re') +
                 s(as.factor(UID), bs = 'mrf', 
                   xt = list(nb = nb), k=1000),
