@@ -19,6 +19,17 @@ cnty_cases$elev_m<-cnty_elev$elevation
 # note that SD of elevation is 495 meters
 # elevation_m is included as a column inside cnty_cases
 
+############################################################################################
+# Map of centroid elevation for continental US #
+# county centroids map #
+library(tmap)
+tm_shape(us_states) + 
+  tm_borders(lwd=3) +
+tm_shape(st_as_sf(cnty_elev,crs=4269)) + 
+  tm_symbols(col="elevation",title.col = 'Centroid elevation\n(meters)',
+             palette='-Spectral',style='cont', midpoint=NA,
+             size=0.3,alpha=0.8) +
+tm_legend(position=c("right","bottom"),outside=FALSE)
 
 ############################################################################################
 # Statistical modeling #
@@ -186,19 +197,41 @@ AIC(m_tw30,m_tw30s,m_nb30,m_nb30s)
 
 #############################################################################################
 #* Visualization of non-linear elevation effects *#
-library(mgcViz)
-# choose a model (one model per figure panel)
 vis<-getViz(m_tw120s) 
-# vis<-getViz(m_tw90s) 
-# vis<-getViz(m_tw30) 
-
-p1<-plot(sm(vis, 2))    #elevation
-p1+ l_fitLine(colour = "red") + l_rug(alpha=0.5) +
-    l_ciLine(mul = 5, colour = "blue", linetype = 2) +
-    xlab('Centered and scaled elevation (SD=495m)') + 
-    ylab('Coefficient (contrib. to Incidence)') + #formally: basis function coefficient
-    ylim(-1.0, 1.0) +
-    ggtitle('120-day Incidence') + 
-#    ggtitle('90-day Incidence') + 
-#    ggtitle('30-day Incidence') + 
-    theme_bw()
+p1_<-plot(sm(vis,1),trans=exp)    #elevation
+p1<-p1_ + l_fitLine(colour = "red",size=2) + l_rug(alpha=0.5) +
+     l_ciLine(mul = 5, colour = "blue", linetype = 2, size=1.5) +
+     xlab('Centered and scaled centroid elevation (SD=495m)') + 
+     ylab('Incidence Relative Risk (exp(Basis coefficient))') + 
+     ylim(0,2.0) + geom_hline(yintercept=1,colour='gray',linetype=3,size=2) +
+     ggtitle('120-day Incidence') + theme_bw() +
+     theme(panel.grid.major = element_blank(), 
+           panel.grid.minor = element_blank())
+p1
+###
+vis<-getViz(m_tw90s) 
+p2_<-plot(sm(vis,1),trans=exp)    #elevation
+p2<-p2_ + l_fitLine(colour = "red",size=2) + l_rug(alpha=0.5) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2, size=1.5) +
+  xlab('Centered and scaled centroid elevation (SD=495m)') + 
+  ylab('Incidence Relative Risk (exp(Basis coefficient))') + 
+  ylim(0,2.0) + geom_hline(yintercept=1,colour='gray',linetype=3,size=2) +
+  ggtitle('90-day Incidence') + theme_bw() +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+p2
+###
+vis<-getViz(m_tw30s) 
+p3_<-plot(sm(vis,1),trans=exp)    #elevation
+p3<-p3_ + l_fitLine(colour = "red",size=2) + l_rug(alpha=0.5) +
+  l_ciLine(mul = 5, colour = "blue", linetype = 2, size=1.5) +
+  xlab('Centered and scaled centroid elevation (SD=495m)') + 
+  ylab('Incidence Relative Risk (exp(Basis coefficient))') + 
+  ylim(0,2.0) + geom_hline(yintercept=1,colour='gray',linetype=3,size=2) +
+  ggtitle('30-day Incidence') + theme_bw() +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+p3
+### final figure
+library(ggpubr)
+ggarrange(p1$ggObj,p2$ggObj,p3$ggObj,nrow=1,ncol=3)
